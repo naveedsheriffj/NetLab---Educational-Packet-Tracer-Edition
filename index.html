@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NetLab Mini – Interactive Network Simulator</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="icon" type="image/png" href="img.png">
+</head>
+
+<body>
+  <!-- Root App Shell -->
+  <div class="app-shell">
+
+    <!-- Top Global Header / Navigation -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="logo-box">
+          <svg viewBox="0 0 24 24" class="logo-svg" width="24" height="24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <rect x="2" y="2" width="6" height="6" rx="1"></rect>
+            <rect x="16" y="2" width="6" height="6" rx="1"></rect>
+            <rect x="9" y="16" width="6" height="6" rx="1"></rect>
+            <path d="M5 8v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"></path>
+            <path d="M12 13v3"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>NetLab <span class="badge-mini">Mini</span></h1>
+          <span class="version-tag">Educational Packet Tracer Edition</span>
+        </div>
+      </div>
+
+      <!-- Center Toolbar: Modes & Tools -->
+      <div class="header-center">
+        <div class="tool-group" role="group" aria-label="Editor Tools">
+          <button type="button" class="btn-tool active" id="tool-select" title="Select / Move Devices (V)">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 3l7 18 3-7 7-3L3 3z"></path>
+            </svg>
+            <span>Select</span>
+          </button>
+
+          <button type="button" class="btn-tool" id="tool-connect" title="Connect Cable between Devices (C)">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 12h16"></path>
+              <circle cx="4" cy="12" r="2"></circle>
+              <circle cx="20" cy="12" r="2"></circle>
+            </svg>
+            <span>Connect Cable</span>
+          </button>
+
+          <button type="button" class="btn-tool" id="tool-delete" title="Delete Device or Connection (D)">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            <span>Delete</span>
+          </button>
+        </div>
+
+        <div class="divider-v"></div>
+
+        <!-- Starter Topologies Dropdown -->
+        <div class="dropdown-container">
+          <label for="starter-topologies-select" class="sr-only">Starter Topologies</label>
+          <select id="starter-topologies-select" class="select-styled" title="Load Starter Example Network">
+            <option value="" disabled selected>📁 Starter Topologies...</option>
+            <option value="lan">1. Single Subnet LAN (2 PCs + Switch)</option>
+            <option value="routed">2. Multi-Subnet Routed (2 LANs + Router)</option>
+            <option value="star">3. Star Topology (3 PCs + Switch)</option>
+            <option value="troubleshoot">4. Troubleshooting Lab (Misconfigured)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Right Toolbar: Save, Reset & Simulation Controls -->
+      <div class="header-right">
+        <button type="button" class="btn-action" id="btn-save-local" title="Save Network to Local Storage">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+          </svg>
+          <span>Save</span>
+        </button>
+
+        <button type="button" class="btn-action" id="btn-load-local" title="Load Network from Local Storage">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Load</span>
+        </button>
+
+        <button type="button" class="btn-action btn-danger" id="btn-clear-canvas" title="Clear Canvas and Reset All">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
+          </svg>
+          <span>Reset Canvas</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Simulation Controls Bar -->
+    <div class="sim-controls-bar">
+      <div class="sim-controls-left">
+        <span class="sim-label">Simulation Mode:</span>
+        <div class="sim-btn-group">
+          <button type="button" class="btn-sim" id="btn-sim-play" title="Play Simulation">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span>Play</span>
+          </button>
+
+          <button type="button" class="btn-sim" id="btn-sim-pause" title="Pause Simulation" disabled>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <rect x="6" y="4" width="4" height="16"></rect>
+              <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+            <span>Pause</span>
+          </button>
+
+          <button type="button" class="btn-sim" id="btn-sim-step" title="Step to Next Packet Hop" disabled>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <polygon points="5 4 15 12 5 20 5 4"></polygon>
+              <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"></line>
+            </svg>
+            <span>Step</span>
+          </button>
+
+          <button type="button" class="btn-sim" id="btn-sim-reset" title="Reset Simulation Timeline">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="5" y="5" width="14" height="14" rx="2"></rect>
+            </svg>
+            <span>Stop / Reset</span>
+          </button>
+        </div>
+
+        <div class="speed-control">
+          <label for="sim-speed-select">Speed:</label>
+          <select id="sim-speed-select" class="select-styled mini">
+            <option value="1800">0.5x Slow</option>
+            <option value="1000" selected>1.0x Normal</option>
+            <option value="500">2.0x Fast</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Quick Ping Dispatcher in Sim Bar -->
+      <div class="sim-controls-right">
+        <div class="ping-launcher">
+          <span class="ping-icon">✉️</span>
+          <label for="ping-src-select" class="sr-only">Source</label>
+          <select id="ping-src-select" class="select-styled mini" title="Select Source Host">
+            <option value="">Source PC...</option>
+          </select>
+          <span class="ping-arrow">➔</span>
+          <label for="ping-dest-select" class="sr-only">Destination</label>
+          <select id="ping-dest-select" class="select-styled mini" title="Select Destination Host">
+            <option value="">Destination PC...</option>
+          </select>
+          <button type="button" class="btn-ping-go" id="btn-start-ping">
+            <span>Ping (ICMP)</span>
+          </button>
+        </div>
+        <div class="sim-status-pill" id="sim-status-pill">Ready</div>
+      </div>
+    </div>
+
+    <!-- Educational Disclaimer Ribbon -->
+    <div class="educational-ribbon">
+      <span class="ribbon-icon">🎓</span>
+      <span><strong>Educational Notice:</strong> NetLab Mini performs local deterministic discrete-event simulation of
+        Layer 2 Switching and Layer 3 Routing. No real network packets are transmitted.</span>
+    </div>
+
+    <!-- Workspace Main Body (Sidebar + Canvas) -->
+    <div class="workspace-wrapper">
+
+      <!-- Left Sidebar: Device Palette & Help -->
+      <aside class="sidebar-palette">
+        <div class="palette-section">
+          <h2 class="palette-title">Device Palette</h2>
+          <p class="palette-sub">Click to add device onto workspace:</p>
+
+          <div class="device-catalog">
+
+            <!-- PC Device -->
+            <button type="button" class="device-item" id="add-pc-btn" title="Add Host PC Workstation">
+              <div class="device-item-icon">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+              </div>
+              <div class="device-item-meta">
+                <span class="device-item-name">End Device (PC)</span>
+                <span class="device-item-desc">Host with IPv4, Mask, Gateway</span>
+              </div>
+              <span class="add-badge">+ Add</span>
+            </button>
+
+            <!-- Switch Device -->
+            <button type="button" class="device-item" id="add-switch-btn" title="Add Layer 2 Switch">
+              <div class="device-item-icon switch-color">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                  <line x1="6" y1="12" x2="18" y2="12"></line>
+                  <path d="M8 10l-2 2 2 2"></path>
+                  <path d="M16 10l2 2-2 2"></path>
+                </svg>
+              </div>
+              <div class="device-item-meta">
+                <span class="device-item-name">Switch (Layer 2)</span>
+                <span class="device-item-desc">Multiport LAN Bridge</span>
+              </div>
+              <span class="add-badge">+ Add</span>
+            </button>
+
+            <!-- Router Device -->
+            <button type="button" class="device-item" id="add-router-btn" title="Add Layer 3 Router">
+              <div class="device-item-icon router-color">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <!-- 4-way routing arrows -->
+                  <path d="M12 7l-2 2h4l-2-2v10l-2-2h4l-2 2"></path>
+                  <path d="M7 12l2-2v4l-2-2h10l-2-2v4l2-2"></path>
+                </svg>
+              </div>
+              <div class="device-item-meta">
+                <span class="device-item-name">Router (Layer 3)</span>
+                <span class="device-item-desc">Dual-Interface IP Gateway</span>
+              </div>
+              <span class="add-badge">+ Add</span>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- Instructions & Short Guide -->
+        <div class="sidebar-guide">
+          <h3 class="guide-title">How To Use:</h3>
+          <ol class="guide-steps">
+            <li><strong>Add Devices:</strong> Click PC, Switch, or Router above.</li>
+            <li><strong>Connect:</strong> Click <em>Connect Cable</em>, then click first device, then second device.
+            </li>
+            <li><strong>Configure:</strong> Click any device on canvas to edit its IP, Subnet Mask &amp; Gateway.</li>
+            <li><strong>Simulate:</strong> Choose Source &amp; Destination PCs in toolbar, then click <em>Ping</em>!
+            </li>
+          </ol>
+        </div>
+
+        <!-- Active Cable Connection Mode Banner -->
+        <div class="connect-banner" id="connect-banner" style="display: none;">
+          <div class="connect-banner-title">
+            <span class="pulse-dot"></span> Cable Mode Active
+          </div>
+          <p id="connect-banner-text">Click first device to start cable...</p>
+          <button type="button" class="btn-cancel-connect" id="btn-cancel-connect">Cancel</button>
+        </div>
+      </aside>
+
+      <!-- Center: Drag-and-Drop Canvas Workspace -->
+      <main class="canvas-container" id="canvas-container">
+
+        <!-- Interactive Canvas Viewport -->
+        <div class="canvas-viewport" id="canvas-viewport">
+
+          <!-- SVG Layer for Cables and Animated Packets -->
+          <svg class="canvas-svg" id="canvas-svg" aria-hidden="true">
+            <defs>
+              <filter id="packet-glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+            </defs>
+            <g id="svg-cables-layer"></g>
+            <g id="svg-packets-layer"></g>
+          </svg>
+
+          <!-- Devices Rendered as DOM Nodes Inside Viewport -->
+          <div class="canvas-nodes-layer" id="canvas-nodes-layer">
+            <!-- Dynamically populated with devices -->
+          </div>
+
+          <!-- Empty Canvas Placeholder -->
+          <div class="canvas-empty-state" id="canvas-empty-state" style="display: none;">
+            <div class="empty-icon">🌐</div>
+            <h3>Workspace is Empty</h3>
+            <p>Add devices from the left sidebar or select a <strong>Starter Topology</strong> from the top bar.</p>
+          </div>
+
+        </div>
+
+        <!-- Floating Quick Canvas Overlay Hints -->
+        <div class="canvas-hint-overlay">
+          <span>💡 Tip: Drag devices to rearrange • Double-click or click device to configure</span>
+        </div>
+      </main>
+
+      <!-- Right Drawer / Inspector Panel: Device Configuration -->
+      <aside class="device-inspector" id="device-inspector" style="display: none;">
+        <div class="inspector-header">
+          <div class="inspector-title-group">
+            <span class="inspector-icon" id="inspect-icon">💻</span>
+            <h2 id="inspect-title">Device Configuration</h2>
+          </div>
+          <button type="button" class="btn-close-inspector" id="btn-close-inspector"
+            aria-label="Close Inspector">&times;</button>
+        </div>
+
+        <div class="inspector-body" id="inspector-body">
+          <!-- Dynamically filled with PC, Switch, or Router Form -->
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- Bottom Collapsible Event Log & Packet Inspection Panel -->
+    <section class="bottom-panel" id="bottom-panel">
+      <div class="bottom-panel-header">
+        <div class="panel-title-group">
+          <span class="panel-icon">📋</span>
+          <h2>Packet Simulation Event Log &amp; Hop Diagnostics</h2>
+          <span class="badge-counter" id="log-counter">0 events</span>
+        </div>
+        <div class="panel-actions">
+          <button type="button" class="btn-log-action" id="btn-clear-log" title="Clear Event Log">Clear Log</button>
+          <button type="button" class="btn-log-action" id="btn-toggle-log"
+            title="Minimize or Expand Log">Collapse</button>
+        </div>
+      </div>
+
+      <div class="event-log-container" id="event-log-container">
+        <div class="event-log-empty" id="event-log-empty">
+          No simulation events yet. Select Source and Destination PCs above, then click <strong>Ping (ICMP)</strong> to
+          trace packet flow!
+        </div>
+        <div class="event-timeline" id="event-timeline">
+          <!-- Hop items appended here -->
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Toast Notification Popup -->
+  <div class="toast-notification" id="toast-notification"></div>
+
+  <!-- Core JavaScript Script -->
+  <script src="script.js"></script>
+</body>
+
+</html>

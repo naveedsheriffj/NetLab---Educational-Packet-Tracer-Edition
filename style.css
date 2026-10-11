@@ -1,0 +1,1216 @@
+/* ==========================================================================
+   NetLab Mini – Interactive Network Simulator (Packet Tracer Edition)
+   Modern, Cyber-Educational Theme in Vanilla CSS
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Root Tokens & Global Reset
+   -------------------------------------------------------------------------- */
+:root {
+  /* Palette */
+  --bg-deep: #070a13;
+  --bg-surface: #0f172a;
+  --bg-panel: #162032;
+  --bg-card: #1e293b;
+  --bg-card-hover: #27354f;
+  --bg-input: #0b1120;
+  
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.16);
+  --border-active: #38bdf8;
+  
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+
+  /* Accents */
+  --cyan-primary: #0284c7;
+  --cyan-bright: #38bdf8;
+  --cyan-glow: rgba(56, 189, 248, 0.35);
+
+  --emerald-green: #10b981;
+  --emerald-bright: #34d399;
+  --emerald-glow: rgba(16, 185, 129, 0.35);
+
+  --amber-warning: #f59e0b;
+  --amber-bright: #fbbf24;
+  --amber-glow: rgba(245, 158, 11, 0.35);
+
+  --rose-danger: #ef4444;
+  --rose-bright: #f87171;
+  --rose-glow: rgba(239, 68, 68, 0.35);
+
+  --indigo-accent: #6366f1;
+  --purple-accent: #8b5cf6;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Fira Code', 'Cascadia Code', Consolas, monospace;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.5);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   2. App Shell Layout
+   -------------------------------------------------------------------------- */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   3. Top Global Header
+   -------------------------------------------------------------------------- */
+.app-header {
+  height: 52px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  gap: 1rem;
+  z-index: 40;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.logo-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.3), rgba(99, 102, 241, 0.3));
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cyan-bright);
+}
+
+.brand-text h1 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  line-height: 1.1;
+}
+
+.badge-mini {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--cyan-bright);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 0.1rem 0.4rem;
+  border-radius: 12px;
+}
+
+.version-tag {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+}
+
+/* Center Tools in Header */
+.header-center {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tool-group {
+  display: flex;
+  background: rgba(7, 10, 19, 0.75);
+  padding: 2px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+}
+
+.btn-tool {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 500;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-tool:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.btn-tool.active {
+  background: rgba(56, 189, 248, 0.18);
+  color: var(--cyan-bright);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.divider-v {
+  width: 1px;
+  height: 22px;
+  background: var(--border-subtle);
+}
+
+.select-styled {
+  background: rgba(11, 17, 32, 0.85);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 0.78rem;
+  padding: 0.35rem 0.65rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.select-styled:hover, .select-styled:focus {
+  border-color: var(--cyan-bright);
+}
+
+.select-styled.mini {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+/* Header Right Actions */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.btn-action {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.35rem 0.65rem;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-action:hover {
+  background: rgba(51, 65, 85, 0.9);
+  border-color: var(--border-medium);
+}
+
+.btn-action.btn-danger {
+  color: var(--rose-bright);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.btn-action.btn-danger:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: var(--rose-bright);
+}
+
+/* --------------------------------------------------------------------------
+   4. Simulation Controls Bar
+   -------------------------------------------------------------------------- */
+.sim-controls-bar {
+  background: #111a2d;
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0.4rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  z-index: 35;
+}
+
+.sim-controls-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.sim-label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sim-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(7, 10, 19, 0.6);
+  padding: 2px 4px;
+  border-radius: 7px;
+  border: 1px solid var(--border-subtle);
+}
+
+.btn-sim {
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.74rem;
+  font-weight: 500;
+  padding: 0.25rem 0.55rem;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-sim:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.btn-sim:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+#btn-sim-play {
+  color: var(--emerald-bright);
+}
+#btn-sim-pause {
+  color: var(--amber-bright);
+}
+#btn-sim-step {
+  color: var(--cyan-bright);
+}
+#btn-sim-reset {
+  color: var(--rose-bright);
+}
+
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+/* Quick Ping Launcher */
+.sim-controls-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ping-launcher {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(7, 10, 19, 0.7);
+  padding: 2px 6px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+}
+
+.ping-icon {
+  font-size: 0.85rem;
+}
+
+.ping-arrow {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+}
+
+.btn-ping-go {
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+  color: #fff;
+  border: none;
+  font-family: inherit;
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 0.28rem 0.65rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3);
+}
+
+.btn-ping-go:hover:not(:disabled) {
+  background: linear-gradient(135deg, #0369a1, #1d4ed8);
+  box-shadow: 0 2px 10px rgba(2, 132, 199, 0.5);
+}
+
+.btn-ping-go:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sim-status-pill {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 12px;
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--emerald-bright);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  white-space: nowrap;
+}
+
+.sim-status-pill.playing {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--cyan-bright);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.sim-status-pill.paused {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--amber-bright);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+/* --------------------------------------------------------------------------
+   5. Educational Notice Ribbon
+   -------------------------------------------------------------------------- */
+.educational-ribbon {
+  background: linear-gradient(90deg, #131c31, #0f182c);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0.2rem 1rem;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ribbon-icon {
+  font-size: 0.78rem;
+}
+
+.educational-ribbon strong {
+  color: var(--cyan-bright);
+}
+
+/* --------------------------------------------------------------------------
+   6. Workspace Wrapper (Sidebar + Canvas + Inspector)
+   -------------------------------------------------------------------------- */
+.workspace-wrapper {
+  flex: 1;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  height: calc(100vh - 128px - 140px); /* accounting for header, bars, and bottom panel */
+}
+
+/* Left Sidebar: Device Palette */
+.sidebar-palette {
+  width: 250px;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-subtle);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow-y: auto;
+  z-index: 25;
+}
+
+.palette-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 0.2rem;
+}
+
+.palette-sub {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  margin-bottom: 0.75rem;
+}
+
+.device-catalog {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.device-item {
+  background: rgba(30, 41, 59, 0.75);
+  border: 1px solid var(--border-subtle);
+  border-radius: 9px;
+  padding: 0.6rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.device-item:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(56, 189, 248, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.device-item-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cyan-bright);
+}
+
+.device-item-icon.switch-color {
+  color: #a5b4fc;
+}
+
+.device-item-icon.router-color {
+  color: #34d399;
+}
+
+.device-item-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.device-item-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.device-item-desc {
+  font-size: 0.66rem;
+  color: var(--text-dim);
+  line-height: 1.2;
+}
+
+.add-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--cyan-bright);
+  background: rgba(56, 189, 248, 0.1);
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+}
+
+/* Sidebar Guide Steps */
+.sidebar-guide {
+  background: rgba(11, 17, 32, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 0.72rem;
+}
+
+.guide-title {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+}
+
+.guide-steps {
+  padding-left: 1rem;
+  color: var(--text-dim);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.guide-steps li {
+  line-height: 1.35;
+}
+
+.guide-steps strong {
+  color: var(--text-main);
+}
+
+.guide-steps em {
+  color: var(--cyan-bright);
+  font-style: normal;
+}
+
+/* Active Cable Connection Banner */
+.connect-banner {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.25), rgba(99, 102, 241, 0.25));
+  border: 1px solid var(--cyan-bright);
+  border-radius: 8px;
+  padding: 0.65rem;
+  font-size: 0.74rem;
+}
+
+.connect-banner-title {
+  font-weight: 700;
+  color: var(--cyan-bright);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.25rem;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--cyan-bright);
+  animation: pulseDot 1s infinite alternate;
+}
+
+@keyframes pulseDot {
+  from { opacity: 0.4; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1.2); }
+}
+
+.btn-cancel-connect {
+  margin-top: 0.5rem;
+  width: 100%;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid var(--rose-bright);
+  color: var(--rose-bright);
+  font-size: 0.7rem;
+  padding: 0.25rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   7. Center Canvas & Grid Viewport
+   -------------------------------------------------------------------------- */
+.canvas-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background-color: #080d1a;
+  background-image: 
+    radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 24px 24px, 120px 120px, 120px 120px;
+  cursor: default;
+}
+
+.canvas-viewport {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* SVG Connection Lines & Animated Packets */
+.canvas-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.cable-path {
+  fill: none;
+  stroke: #38bdf8;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  cursor: pointer;
+  pointer-events: stroke;
+  transition: stroke 0.2s ease, stroke-width 0.2s ease;
+  filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.4));
+}
+
+.cable-path:hover {
+  stroke: #7dd3fc;
+  stroke-width: 5;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.8));
+}
+
+.cable-path.cable-active {
+  stroke: #34d399;
+  filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.8));
+}
+
+.cable-path.cable-delete-hover {
+  stroke: #ef4444;
+  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.8));
+}
+
+/* Animated SVG Packet Envelope/Circle */
+.packet-node {
+  fill: #38bdf8;
+  stroke: #ffffff;
+  stroke-width: 2;
+  filter: url(#packet-glow);
+  transition: opacity 0.2s ease;
+}
+
+.packet-node.reply {
+  fill: #10b981;
+}
+
+.packet-node.drop {
+  fill: #ef4444;
+}
+
+/* --------------------------------------------------------------------------
+   8. Device Nodes on Canvas
+   -------------------------------------------------------------------------- */
+.canvas-nodes-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.node-element {
+  position: absolute;
+  pointer-events: auto;
+  user-select: none;
+  cursor: grab;
+  width: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.05s ease, box-shadow 0.2s ease;
+}
+
+.node-element:active {
+  cursor: grabbing;
+}
+
+.node-icon-box {
+  width: 60px;
+  height: 52px;
+  background: rgba(30, 41, 59, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.node-element:hover .node-icon-box {
+  border-color: rgba(56, 189, 248, 0.6);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), 0 0 12px var(--cyan-glow);
+  transform: translateY(-2px);
+}
+
+.node-element.selected .node-icon-box {
+  border-color: var(--cyan-bright);
+  box-shadow: 0 0 16px var(--cyan-glow);
+  background: rgba(30, 41, 59, 1);
+}
+
+.node-element.highlight-source .node-icon-box {
+  border-color: var(--emerald-bright);
+  box-shadow: 0 0 18px var(--emerald-glow);
+}
+
+.node-element.highlight-dest .node-icon-box {
+  border-color: #a855f7;
+  box-shadow: 0 0 18px rgba(168, 85, 247, 0.5);
+}
+
+.node-element.connect-target .node-icon-box {
+  border-color: var(--amber-bright);
+  box-shadow: 0 0 16px var(--amber-glow);
+  animation: pulseConnect 0.8s infinite alternate;
+}
+
+@keyframes pulseConnect {
+  from { transform: scale(1); }
+  to { transform: scale(1.06); }
+}
+
+/* Device Colors in Icon Box */
+.node-element.pc .node-icon-box svg { color: var(--cyan-bright); }
+.node-element.switch .node-icon-box svg { color: #a5b4fc; }
+.node-element.router .node-icon-box svg { color: #34d399; }
+
+/* Status LED on Device Node */
+.node-led {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--emerald-bright);
+  box-shadow: 0 0 5px var(--emerald-glow);
+}
+
+/* Node Label & IP Badge */
+.node-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-top: 4px;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+}
+
+.node-subtext {
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  color: var(--cyan-bright);
+  background: rgba(15, 23, 42, 0.85);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 2px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.node-ports-count {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+}
+
+/* Canvas Empty State */
+.canvas-empty-state {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--text-muted);
+  max-width: 320px;
+}
+
+.empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.6;
+}
+
+.canvas-empty-state h3 {
+  font-size: 1rem;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+}
+
+.canvas-empty-state p {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.canvas-hint-overlay {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  background: rgba(15, 23, 42, 0.75);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   9. Right Drawer / Inspector Panel: Device Configuration
+   -------------------------------------------------------------------------- */
+.device-inspector {
+  width: 320px;
+  background: var(--bg-surface);
+  border-left: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  z-index: 30;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.4);
+  animation: slideInRight 0.2s ease;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.inspector-header {
+  padding: 0.75rem 1rem;
+  background: #111a2e;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.inspector-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.inspector-title-group h2 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.btn-close-inspector {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.3rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.btn-close-inspector:hover {
+  color: var(--text-main);
+}
+
+.inspector-body {
+  padding: 1rem;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group-inspect {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.form-group-inspect label {
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.input-inspect {
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  padding: 0.4rem 0.6rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.input-inspect:focus {
+  border-color: var(--cyan-bright);
+}
+
+.input-inspect.invalid {
+  border-color: var(--rose-bright);
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.inspect-section-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--cyan-bright);
+  letter-spacing: 0.04em;
+  margin-top: 0.4rem;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 0.25rem;
+}
+
+.inspect-card-box {
+  background: rgba(11, 17, 32, 0.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.btn-inspect-save {
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+  color: #fff;
+  border: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.btn-inspect-save:hover {
+  background: linear-gradient(135deg, #0369a1, #1d4ed8);
+}
+
+.btn-inspect-delete {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--rose-bright);
+  font-size: 0.74rem;
+  padding: 0.4rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 0.25rem;
+}
+
+.btn-inspect-delete:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: var(--rose-bright);
+}
+
+/* --------------------------------------------------------------------------
+   10. Bottom Collapsible Event Log & Packet Inspection Panel
+   -------------------------------------------------------------------------- */
+.bottom-panel {
+  height: 140px;
+  background: #090e1b;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  z-index: 30;
+  transition: height 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bottom-panel.collapsed {
+  height: 38px;
+}
+
+.bottom-panel-header {
+  height: 38px;
+  background: #0d1527;
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.panel-title-group h2 {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.badge-counter {
+  font-size: 0.65rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  padding: 0.1rem 0.4rem;
+  border-radius: 10px;
+}
+
+.panel-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.btn-log-action {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-log-action:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-main);
+}
+
+.event-log-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.6rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+}
+
+.event-log-empty {
+  color: var(--text-dim);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  padding: 0.5rem 0;
+}
+
+.event-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.event-step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.5);
+  border-left: 3px solid var(--cyan-bright);
+  animation: fadeIn 0.2s ease;
+}
+
+.event-step-item.active-step {
+  background: rgba(56, 189, 248, 0.12);
+  border-left-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);
+}
+
+.event-step-item.success {
+  border-left-color: var(--emerald-bright);
+}
+
+.event-step-item.error {
+  border-left-color: var(--rose-bright);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.event-step-item.warn {
+  border-left-color: var(--amber-bright);
+}
+
+.event-badge-hop {
+  font-size: 0.65rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.event-badge-layer {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.layer-l2 { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
+.layer-l3 { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+.layer-app { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; }
+
+.event-text {
+  flex: 1;
+  color: #e2e8f0;
+  line-height: 1.35;
+}
+
+/* --------------------------------------------------------------------------
+   11. Toast Notifications
+   -------------------------------------------------------------------------- */
+.toast-notification {
+  position: fixed;
+  bottom: 160px;
+  right: 20px;
+  background: #1e293b;
+  border: 1px solid var(--cyan-bright);
+  color: var(--text-main);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: all 0.25s ease;
+}
+
+.toast-notification.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   12. Responsive Adjustments
+   -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .sidebar-palette {
+    width: 200px;
+  }
+  .app-header {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 0.5rem;
+  }
+  .sim-controls-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
